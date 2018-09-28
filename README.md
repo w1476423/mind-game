@@ -29,12 +29,12 @@ The concept for our application is based on education. We are looking to build a
   - 2-3 weeks
   - Priority 10
 - As a user, I want to see a menu of games, so that I can see the choice of games and settings
- - priority 20
+  - priority 20
 - As a guardian, I want to see the score history of my child, so that I can oversee the performance
- - 2 weeks
- - priority 10
+   - 2 weeks
+   - priority 10
 - As a researcher, I want to play the game, so that I can see how well the game is designed to help with learning disability
- - 1 week
- - priority 40
+   - 1 week
+   - priority 40
 
 
