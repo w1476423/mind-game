@@ -24,9 +24,13 @@ Create an initial set of project requirements expressed as user stories. Make su
 * To be updated according to iterations*
 
 Users (game player)- play the game to be entertained
+
 Instructor/Client (Chipidza)- attain some value to utilize in a specific endeavor
+
 Developer & designer (us)- bring the vision into fruition and ensure the code is aligned with design vision as well
+
 Admin (parents)- for children to have fun while learning and track their progress
+
 Researcher (subject matter expert)- to provide subject matter expert information to be shown in the application and ensure it is implemented correctly, also to provide a reference to explain how and why certain games within the game are being showcased
 
 # The user stories must have estimates of completion times
