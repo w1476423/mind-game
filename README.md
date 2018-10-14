@@ -1,4 +1,4 @@
-# Educational game project 
+# Team SWAG (Team3) Educational game project 
 
 # The concept for our application
 
