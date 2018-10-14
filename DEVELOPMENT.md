@@ -23,7 +23,7 @@ $ python -m venv venv
 $ source venv/bin/activate
 ```
 
-### ctivate virtual environment on Windows
+### Ativate virtual environment on Windows
 ```bash
 D:\ist303-team3-educational-game>venv\Scripts\activate.bat
 ```
@@ -37,8 +37,7 @@ Use the `deactivate` terminal command to exit the virtual environment.
 
 # Game Development
 
-[Python Arcade Documentation](https://media.readthedocs.org/pdf/arcade-book/latest/arcade-book.pdf) - For developing 
-the individual games and main menu.
+[Python Arcade PDF Book](https://media.readthedocs.org/pdf/arcade-book/latest/arcade-book.pdf) - Comprehensive Arcade development book, for developing the individual games and main menu.
 
 [SQLAlchemy](https://docs.sqlalchemy.org/en/latest/orm/tutorial.html) - For relating the objects in each game with 
 database tables, for recording game history.
