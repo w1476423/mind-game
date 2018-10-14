@@ -23,7 +23,7 @@ $ python -m venv venv
 $ source venv/bin/activate
 ```
 
-### Activate virtual environment on Windows
+#### Activate virtual environment on Windows
 ```bash
 D:\ist303-team3-educational-game>venv\Scripts\activate.bat
 ```
