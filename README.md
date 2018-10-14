@@ -2,7 +2,12 @@
 
 # The concept for our application
 
-The concept for our application is based on education. We are looking to build an application in the form of a game that can track data from gameplay to show the progress of any given user. Our target audience for this application is currently for people with Autism/Alzheimers. We are seeking to develop an application that can improve a learning disability of either of these groups of people. Collectively with the stakeholders who are; researchers, instructors, developers (designers), users and parents, we believe that we can build something that is beneficial and impactful to the audience we are seeking to reach out to. 
+The concept for our application is based on education. We are looking to build an application in the form of a game 
+that can track data from gameplay to show the progress of any given user. Our target audience for this application is 
+currently for people with Autism/Alzheimers. We are seeking to develop an application that can improve a learning 
+disability of either of these groups of people. Collectively with the stakeholders who are; researchers, instructors, 
+developers (designers), users and parents, we believe that we can build something that is beneficial and impactful to 
+the audience we are seeking to reach out to. 
 
 # Team members:
 - Revell Bell
@@ -18,9 +23,8 @@ The concept for our application is based on education. We are looking to build a
 - Admin (parents/guardians)
   for children to have fun while learning and track their progress
 - Researcher (subject matter expert)
-  to provide subject matter expert information to be shown in the application and ensure it is implemented correctly, also to provide a   reference to explain how and why certain games within the game are being showcased
-
-
+  to provide subject matter expert information to be shown in the application and ensure it is implemented correctly, 
+  also to provide a   reference to explain how and why certain games within the game are being showcased
 
 # Initial set of project requirements expressed as user stories
 
@@ -36,5 +40,3 @@ The concept for our application is based on education. We are looking to build a
 - As a researcher, I want to play the game, so that I can see how well the game is designed to help with learning disability
    - 1 week
    - priority 40
-
-
