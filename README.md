@@ -33,17 +33,5 @@ the audience we are seeking to reach out to.
 # User Stories
 - https://github.com/mmshareghi/ist303-team3-educational-game/wiki/User-Stories
 
-# Initial set of project requirements expressed as user stories
-
-* NOTE: To be updated according to iterations*
-- As a user, I want to interact with the game, so that it's more entertaining and engaging
-  - 2-3 weeks
-  - Priority 10
-- As a user, I want to see a menu of games, so that I can see the choice of games and settings
-  - priority 20
-- As a guardian, I want to see the score history of my child, so that I can oversee the performance
-   - 2 weeks
-   - priority 10
-- As a researcher, I want to play the game, so that I can see how well the game is designed to help with learning disability
-   - 1 week
-   - priority 40
+# Sprint Planning / Review Notes
+- https://github.com/mmshareghi/ist303-team3-educational-game/wiki/Sprint-Planning
