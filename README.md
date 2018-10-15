@@ -26,6 +26,8 @@ the audience we are seeking to reach out to.
   to provide subject matter expert information to be shown in the application and ensure it is implemented correctly, 
   also to provide a   reference to explain how and why certain games within the game are being showcased
 
+# Milestones
+- https://github.com/mmshareghi/ist303-team3-educational-game/milestones
 
 # Current Issues
 - https://github.com/mmshareghi/ist303-team3-educational-game/issues
