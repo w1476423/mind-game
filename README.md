@@ -27,7 +27,7 @@ the audience we are seeking to reach out to.
   also to provide a   reference to explain how and why certain games within the game are being showcased
 
 # Milestones
-- https://github.com/mmshareghi/ist303-team3-educational-game/milestones
+- https://github.com/mmshareghi/ist303-team3-educational-game/wiki/milestones
 
 # Current Issues
 - https://github.com/mmshareghi/ist303-team3-educational-game/issues
