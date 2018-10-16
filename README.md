@@ -25,19 +25,27 @@ Type the following in the root directory of the project:
 
 (Linux/MacOS)
 ```
+# First install
 $ py -m venv venv
 $ source venv/Scripts/activate
 $ pip install -r requirements.txt
+
+# Running the game
+(venv)
 $ PYTHONPATH=src python src/edugame/main.py
 ```
 
 (Windows)
 ```
-C:\<project-dir>\py -m venv venv
-C:\<project-dir>\venv\Scripts\activate.bat
-C:\<project-dir>\pip install -r requirements.txt
-C:\<project-dir>\set PYTHONPATH=src
-C:\<project-dir>\python src\edugame\main.py
+# First installation
+C:\project> py -m venv venv
+C:\project> env\Scripts\activate.bat
+(venv) C:\project> pip install -r requirements.txt
+
+# Running the game
+(venv) C:\project> set PYTHONPATH src
+PYTHONPATH=src
+(venv) C:\project> python src\edugame\main.py
 ```
 
 # Team members:
