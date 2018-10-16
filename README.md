@@ -39,12 +39,11 @@ $ PYTHONPATH=src python src/edugame/main.py
 ```
 # First installation
 C:\project> py -m venv venv
-C:\project> env\Scripts\activate.bat
+C:\project> venv\Scripts\activate.bat
 (venv) C:\project> pip install -r requirements.txt
 
 # Running the game
-(venv) C:\project> set PYTHONPATH src
-PYTHONPATH=src
+(venv) C:\project> set PYTHONPATH=src
 (venv) C:\project> python src\edugame\main.py
 ```
 
