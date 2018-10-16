@@ -19,7 +19,7 @@ $ git clone https://github.com/mmshareghi/ist303-team3-educational-game
 
 # Running 
 
-### Set up environment
+### Set up and run the game
 
 Type the following in the root directory of the project:
 
@@ -39,11 +39,6 @@ C:\<project-dir>\pip install -r requirements.txt
 C:\<project-dir>\venv\Scripts\activate.bat
 
 C:\<project-dir>\python src\edugame\main.py
-```
-
-### Run the game script
-```
-$ python p
 ```
 
 # Team members:
