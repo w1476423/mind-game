@@ -26,8 +26,8 @@ Type the following in the root directory of the project:
 (Linux/MacOS)
 ```
 $ py -m venv venv
-$ pip install -r requirements.txt
 $ source venv/Scripts/activate
+$ pip install -r requirements.txt
 
 $ python src/edugame/main.py
 ```
@@ -35,8 +35,8 @@ $ python src/edugame/main.py
 (Windows)
 ```
 C:\<project-dir>\py -m venv venv
-C:\<project-dir>\pip install -r requirements.txt
 C:\<project-dir>\venv\Scripts\activate.bat
+C:\<project-dir>\pip install -r requirements.txt
 
 C:\<project-dir>\python src\edugame\main.py
 ```
