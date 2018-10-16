@@ -69,3 +69,10 @@ C:\<project-dir>\python src\edugame\main.py
 
 # Sprint Planning / Review Notes
 - https://github.com/mmshareghi/ist303-team3-educational-game/wiki/Sprint-Planning
+
+# Charts
+  -Burndown
+    -https://github.com/mmshareghi/ist303-team3-educational-game/wiki/_Burndown-Chart
+  
+  -UML Class Diagram
+    -https://github.com/mmshareghi/ist303-team3-educational-game/wiki/_UML-Chart
