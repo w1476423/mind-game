@@ -15,7 +15,7 @@ Jetbrains PyCharm is one of the best IDEs for Python development, and it is avai
 #### Creating your virtual environment
 
 ```bash
-$ python -m venv venv
+$ py -m venv venv
 ```
 
 #### Activate virtual environment on Linux
@@ -23,17 +23,23 @@ $ python -m venv venv
 $ source venv/bin/activate
 ```
 
-#### Activate virtual environment on Windows
+#### Activate virtual environment on Windows (Git bash)
+```bash
+$ source venv/Scripts/activate
+```
+
+#### Activate virtual environment on Windows (command prompt)
 ```bash
 D:\ist303-team3-educational-game>venv\Scripts\activate.bat
 ```
 
 #### Installing requirements
 ```bash
-pip install -r requirements.txt
+(venv)
+$ pip install -r requirements.txt
 ```
 
-Use the `deactivate` terminal command to exit the virtual environment.
+NOTE: Use the `deactivate` terminal command to exit the `venv` virtual environment. This will return you to the global Python package environment.
 
 # Game Development
 
@@ -41,3 +47,13 @@ Use the `deactivate` terminal command to exit the virtual environment.
 
 [SQLAlchemy](https://docs.sqlalchemy.org/en/latest/orm/tutorial.html) - For relating the objects in each game with 
 database tables, for recording game history.
+
+
+# Unit Tests (Pytest)
+
+To run the unit tests, use the following command (while in the `venv` virtual environment)
+
+```
+(venv)
+$ pytest tests/*
+```
