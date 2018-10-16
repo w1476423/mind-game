@@ -9,6 +9,43 @@ disability of either of these groups of people. Collectively with the stakeholde
 developers (designers), users and parents, we believe that we can build something that is beneficial and impactful to 
 the audience we are seeking to reach out to. 
 
+# Installing
+
+The game requires Python 3.7 to be installed. From the command line, type the following:
+
+```
+$ git clone https://github.com/mmshareghi/ist303-team3-educational-game
+```
+
+# Running 
+
+### Set up environment
+
+Type the following in the root directory of the project:
+
+(Linux/MacOS)
+```
+$ py -m venv venv
+$ pip install -r requirements.txt
+$ source venv/Scripts/activate
+
+$ python src/edugame/main.py
+```
+
+(Windows)
+```
+C:\<project-dir>\py -m venv venv
+C:\<project-dir>\pip install -r requirements.txt
+C:\<project-dir>\venv\Scripts\activate.bat
+
+C:\<project-dir>\python src\edugame\main.py
+```
+
+### Run the game script
+```
+$ python p
+```
+
 # Team members:
 - Revell Bell
 - Hang Liang
