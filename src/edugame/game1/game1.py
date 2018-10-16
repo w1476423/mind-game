@@ -1,7 +1,7 @@
 """
 Game 1
 """
-from api import Game
+from edugame.api import Game
 
 
 class CardGame(Game):

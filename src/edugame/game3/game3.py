@@ -1,7 +1,7 @@
 """
 Game 3
 """
-from api import Game
+from edugame.api import Game
 
 
 class Game3(Game):

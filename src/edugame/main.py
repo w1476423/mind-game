@@ -38,7 +38,7 @@ class Cursor:
                                      border_width=2)
 
 
-from api import Game
+from edugame.api import Game
 
 
 class MainWindow(Game):

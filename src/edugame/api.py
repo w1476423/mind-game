@@ -3,10 +3,12 @@ API includes interfaces for each game to implement
 
 NOTE: These are not finalized.
 """
-
+import arcade
 from arcade import Window
 
-from common import *
+import datetime
+
+from edugame.common import TextButton
 
 
 class ExitButton(TextButton):
@@ -143,4 +145,11 @@ class GameSession:
     """
     Represents the life cycle of a game from start to finish.
     """
-    pass
+
+    def __init__(self, user_id, time_played, score) -> None:
+        super().__init__()
+        self.user_id = user_id
+        self.time = datetime.datetime.now()
+        self.time_played = time_played
+        self.score = score
+
