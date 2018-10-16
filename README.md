@@ -28,8 +28,7 @@ Type the following in the root directory of the project:
 $ py -m venv venv
 $ source venv/Scripts/activate
 $ pip install -r requirements.txt
-
-$ python src/edugame/main.py
+$ PYTHONPATH=src python src/edugame/main.py
 ```
 
 (Windows)
@@ -37,7 +36,7 @@ $ python src/edugame/main.py
 C:\<project-dir>\py -m venv venv
 C:\<project-dir>\venv\Scripts\activate.bat
 C:\<project-dir>\pip install -r requirements.txt
-
+C:\<project-dir>\set PYTHONPATH=src
 C:\<project-dir>\python src\edugame\main.py
 ```
 
