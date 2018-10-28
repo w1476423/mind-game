@@ -16,7 +16,8 @@ class DataAccess:
                                       USER_ID           INTEGER,   
                                       DATE_PLAYED       DATE     NOT NULL, 
                                       TOTAL_TIME_PLAYED REAL     NOT NULL, 
-                                      SCORE             REAL     NOT NULL)'''
+                                      SCORE             REAL     NOT NULL,
+                                      GAME STATISTICS   REAL     NOT NULL)'''
 
     INSERT_STATEMENT = \
         '''insert into game_history (USER_ID, DATE_PLAYED, TOTAL_TIME_PLAYED, SCORE) values (?,?,?,?)'''
