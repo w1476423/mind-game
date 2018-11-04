@@ -5,7 +5,7 @@ import random
 
 from arcade import color, Color
 
-from edugame.api import Game
+from edugame.api import Game, GameState
 from edugame.common import *
 
 SHOW_READY = 'show_ready'
@@ -25,45 +25,69 @@ class SimonNumbers(Game):
                  resizable: bool = False):
         super().__init__(width, height, title, resizable)
 
-        self.random_numbers = None
         self.number_count = 2  # TODO: populate this from a game level property
 
         self.number_colors = [color.GREEN, color.YELLOW, color.BLUE, color.WHITE, color.RED, color.ORANGE]
+
+        self.numbers_presented = []
+        self.numbers_entered = []
+        self.number_correct = 0
+
         # random.shuffle(self.number_colors)
-
-        self.buttonStart = GameButton(name="Start", center_x=self.width / 3,
-                                      center_y=self.height / 2,
-                                      on_click=lambda: self.transition(SHOW_NUMBERS))
-
-        self.number_buttons = []
-        for i in range(10):
-            self.number_buttons.append(
-                GameButton(
-                    name=str(i),
-                    center_x=self.width / 2 - 140 + 30 * i,
-                    center_y=self.height / 2 - 40,
-                    on_click=lambda idx=i: self.selected_number(idx))
-            )
 
         self.transition(SHOW_READY)
 
         arcade.set_background_color(color.COOL_GREY)
 
     def selected_number(self, i):
-        print("Selected: " + str(i))
+        self.numbers_entered.append(i)
+        if len(self.numbers_entered) == self.number_count:
+            self.transition(SHOW_SCORE)
 
     def get_color(self, i):
         return self.number_colors[i % len(self.number_colors)]
 
     def transition(self, next_state):
+        """Represents actions that occur on transitions between states"""
 
         self.button_list.clear()
 
-        if next_state == SHOW_READY:
-            self.button_list += [self.buttonStart]
+        print("(" + str(self.state) + "," + str(next_state) + ")") # Debug
 
-        if next_state == ASK_FOR_NUMBERS:
-            self.button_list += self.number_buttons
+        if (self.state, next_state) == (GameState.READY, SHOW_READY):
+            buttonStart = GameButton(name="Start", center_x=self.width / 2,
+                                     center_y=self.height / 2 - 50,
+                                     on_click=lambda: self.transition(SHOW_NUMBERS))
+
+            self.button_list += [buttonStart]
+
+        if (self.state, next_state) == (SHOW_READY, SHOW_NUMBERS):
+            self.elapsed = 0
+            for i in range(self.number_count):
+                self.numbers_presented.append(random.randint(0, 9))
+
+        if (self.state, next_state) == (SHOW_NUMBERS, ASK_FOR_NUMBERS):
+
+            number_buttons = []
+            for i in range(10):
+                number_buttons.append(
+                    GameButton(
+                        name=str(i),
+                        center_x=self.width / 2 - 140 + 30 * i,
+                        center_y=self.height / 2 - 40,
+                        on_click=lambda idx=i: self.selected_number(idx))
+                )
+
+            self.button_list += number_buttons
+
+        if (self.state, next_state) == (ASK_FOR_NUMBERS, SHOW_SCORE):
+
+            self.number_correct = 0
+
+            # calculate score
+            for i in range(self.number_count):
+                if self.numbers_presented[i] == self.numbers_entered[i]:
+                    self.number_correct += 1
 
         self.state = next_state
 
@@ -75,16 +99,20 @@ class SimonNumbers(Game):
 
         if self.state == SHOW_NUMBERS:
 
-            total_time = 2 * len(self.random_numbers)  # 2 seconds per number
+            total_time = 2 * self.number_count  # 2 seconds per number
 
             index = int(self.elapsed * self.number_count / total_time)
 
             # print("elapsed: " + str(self.elapsed) + ' pct: ' + str(self.elapsed / total_time) + ' index: ' + str(index))
 
-            if index < len(self.random_numbers):
-                self.print_message_center(message=str(self.random_numbers[index]),
+            if index < self.number_count:
+                self.print_message_center(message=str(self.numbers_presented[index]),
                                           color=self.get_color(index),
                                           size=300)
+
+        if self.state == SHOW_SCORE:
+            self.print_message_center("Score: " + str(self.number_correct) + " out of " + str(self.number_count),
+                                      color.GREEN)
 
         if self.state == ASK_FOR_NUMBERS:
             self.print_message_center("Which numbers appeared?", color=color.GREEN)
@@ -96,13 +124,6 @@ class SimonNumbers(Game):
         super().on_update(delta_time)
 
         if self.state == SHOW_NUMBERS:
-            # generate number list
-            if not self.random_numbers:
-                self.random_numbers = []
-                self.elapsed = 0
-                for i in range(self.number_count):
-                    self.random_numbers.append(random.randint(0, 9))
-
             self.elapsed += delta_time
 
             # TODO: make configurable
