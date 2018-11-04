@@ -5,6 +5,10 @@ Includes common components (buttons, etc) for a uniform look.
 """
 
 
+SCREEN_WIDTH = 640
+SCREEN_HEIGHT = 480
+FONT_SIZE = 20
+
 class TextButton:
     """ Text-based button """
 
@@ -12,7 +16,7 @@ class TextButton:
                  center_x, center_y,
                  width, height,
                  text,
-                 font_size=18,
+                 font_size=FONT_SIZE,
                  font_face="Arial",
                  face_color=arcade.color.LIGHT_GRAY,
                  highlight_color=arcade.color.WHITE,
@@ -84,3 +88,17 @@ class TextButton:
 
     def on_release(self):
         self.pressed = False
+
+
+class GameButton(TextButton):
+    def __init__(self, center_x, center_y, name, on_click):
+        super().__init__(center_x=center_x,
+                         center_y=center_y,
+                         width=10 + 12 * len(name),
+                         height=30,
+                         text=name)
+        self.on_click = on_click
+
+    def on_release(self):
+        super().on_release()
+        self.on_click()

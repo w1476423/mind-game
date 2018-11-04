@@ -9,8 +9,11 @@ python -m arcade.examples.move_mouse
 import arcade
 
 # Set up the constants
-SCREEN_WIDTH = 640
-SCREEN_HEIGHT = 480
+import edugame
+from edugame import common
+from edugame.common import GameButton
+from edugame.game1.game1 import SimonNumbers
+
 
 RECT_WIDTH = 50
 RECT_HEIGHT = 50
@@ -38,18 +41,21 @@ class Cursor:
                                      border_width=2)
 
 
-from edugame.api import Game
-
+from edugame.api import Game, GameState
 
 class MainWindow(Game):
     """ Main application class. """
 
-    exited = False
+    def __init__(self, width = common.SCREEN_WIDTH, height = common.SCREEN_HEIGHT):
+        super().__init__(width, height, title="Main Window", fullscreen=False, resizable=False)
 
-    def __init__(self, width, height):
-        super().__init__(width, height, title="Main Window", fullscreen=False, resizable=True)
+        self.game1_button = GameButton(center_x=self.width / 2,
+                                       center_y=self.height / 2,
+                                       name="Simon Says",
+                                       on_click=self.start_simon)
         self.cursor = None
         self.left_down = False
+        self.game = None
 
     def setup(self):
         width, height = self.get_size()
@@ -63,31 +69,70 @@ class MainWindow(Game):
         self.cursor = Cursor(0, height, angle, color)
         self.left_down = False
 
+        self.button_list.append(self.game1_button)
+
     def update(self, dt):
         """ Move everything """
         if self.left_down:
             self.cursor.angle += 2
 
+    def handle_exit(self):
+        if self.game:
+            self.game.close()
+            self.game = None
+            self.set_visible(True)
+            self.set_state(GameState.READY)
+
+    def start_simon(self):
+        if not self.game:
+            self.game = SimonNumbers()
+            self.game.quit_button.on_click = self.handle_exit
+            arcade.set_window(self.game)
+            self.game.game_start()
+            self.set_visible(False)
+
+
     def on_draw(self):
         super().on_draw()
-        self.cursor.draw()
-        arcade.draw_text('Welcome!', 0, arcade.get_window().height - 30, arcade.color.WHITE, 30)
 
-        if (self.current_state is 'EXITING'):
-            arcade.set_background_color(arcade.color.BLACK)
-            arcade.draw_text('Thanks for Playing!', 0, arcade.get_window().height / 2,
-                             arcade.color.BLUE, 30)
-            self.exited = True
+        if not self.game:
+            self.cursor.draw()
+
+        if self.state is GameState.READY:
+            self.print_message('Welcome! Select a Game:', color=arcade.color.GREEN)
+
+        if self.state is GameState.CLOSING:
+            self.button_list.clear()
+            arcade.set_background_color(arcade.color.BLUE)
+            self.print_message_center("Thanks for playing!", color=arcade.color.WHITE)
+
+    close_timer = 0
+
+    def on_mouse_press(self, x: float, y: float, button: int, modifiers: int):
+        super().on_mouse_press(x, y, button, modifiers)
+
+        if button == arcade.MOUSE_BUTTON_LEFT:
+            self.left_down = True
+
+    def on_mouse_release(self, x: float, y: float, button: int, modifiers: int):
+        super().on_mouse_release(x, y, button, modifiers)
+
+        self.left_down = False
 
     def on_update(self, delta_time: float):
-        if self.exited:
-            arcade.pause(2)
-            exit(0)
+
+        super().on_update(delta_time)
+
+        if self.state is GameState.EXITING:
+            self.set_state(GameState.CLOSING)
+
+        elif self.state is GameState.CLOSING:
+            self.close_timer += delta_time
+            if self.close_timer >= 2.0:
+                self.close()
 
     def game_exit(self):
         super().game_exit()
-        self.current_state = 'EXITING'
-        # exit(0)
 
     def game_draw(self):
         super().game_draw()
@@ -101,10 +146,11 @@ class MainWindow(Game):
 
 
 def main():
-    window = MainWindow(SCREEN_WIDTH, SCREEN_HEIGHT)
+    window = MainWindow()
     window.setup()
-    window.set_caption("Educational Game")
+    window.set_caption("M!ndGames")
     arcade.run()
+    arcade.close_window()
 
 
 if __name__ == "__main__":
