@@ -1,0 +1,99 @@
+@startuml
+
+
+namespace edugame {
+
+    namespace api {
+
+        arcade.GameWindow <|-- Game
+
+        abstract class arcade.GameWindow
+        {
+            draw()
+            update()
+            states : GameState
+        }
+
+        abstract class Game
+        {
+            game_stop()
+            save_session(GameSession)
+            game_start()
+            game_state : GameState
+        }
+
+        enum GameState {
+            READY,
+            STARTING,
+            STARTED,
+            STOPPING,
+            STOPPED
+        }
+
+        abstract class GameSession {
+            save()
+        }
+    }
+
+    namespace db {
+
+        class DataAccess {
+            save_game_session()
+        }
+
+        edugame.api.Game --|> DataAccess
+        edugame.api.GameSession --|> BasicGameSession
+
+        class BasicGameSession {
+            user_id : Integer
+            date_played : Date
+            total_time_played : Timestamp
+            Score : Integer
+        }
+
+        class UserProfile {
+
+        }
+    }
+
+
+    namespace common {
+
+        abstract class Graphic {
+            draw()
+        }
+
+        abstract class Button {
+           on_press()
+        }
+
+        class TextButton {
+           set_text(label)
+        }
+
+        class PictureButton {
+           set_picture(photo)
+        }
+
+        Graphic <|-- Button
+        Button <|-- TextButton
+        Button <|-- PictureButton
+    }
+
+
+    namespace games {
+
+        class NumberGame
+        edugame.api.Game <|-- NumberGame
+
+
+        class MainWindow
+        edugame.api.Game <|-- MainWindow
+
+
+        class SnakeGame
+        edugame.api.Game <|-- SnakeGame
+    }
+
+}
+@enduml
