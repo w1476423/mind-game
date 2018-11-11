@@ -49,7 +49,8 @@ class GameState(Enum):
     READY = 'Ready'
     EXITING = 'Exiting'
     CLOSING = 'Closing'
-
+    STARTING = 'Starting'
+    STOPPED = 'Stopped'
 
 class Game(Window):
     """

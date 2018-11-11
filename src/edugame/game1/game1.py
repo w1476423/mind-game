@@ -21,6 +21,8 @@ class SimonNumbers(Game):
     Card-based memory game
     """
 
+    total_score = 0
+
     def __init__(self, width: float = 640, height: float = 480, title: str = 'Arcade Window',
                  resizable: bool = False):
         super().__init__(width, height, title, resizable)
@@ -32,17 +34,22 @@ class SimonNumbers(Game):
         self.numbers_presented = []
         self.numbers_entered = []
         self.number_correct = 0
+        self.seconds_per_number = 1
 
         # random.shuffle(self.number_colors)
 
         self.transition(SHOW_READY)
+
+        # start game session
+
+        # load historical statistics
 
         arcade.set_background_color(color.COOL_GREY)
 
     def selected_number(self, i):
         self.numbers_entered.append(i)
         if len(self.numbers_entered) == self.number_count:
-            self.transition(SHOW_SCORE)
+            self.elapsed = 0
 
     def get_color(self, i):
         return self.number_colors[i % len(self.number_colors)]
@@ -61,12 +68,24 @@ class SimonNumbers(Game):
 
             self.button_list += [buttonStart]
 
-        if (self.state, next_state) == (SHOW_READY, SHOW_NUMBERS):
+        if (self.state, next_state) == (SHOW_SCORE, SHOW_NUMBERS) :
+            if self.number_correct == self.number_count:
+                self.number_count += 1
+            else:
+                self.number_count = max(2, self.number_count - 1)
+
+            self.number_correct = 0
+
+        if (self.state, next_state) == (SHOW_SCORE, SHOW_NUMBERS)or \
+                (self.state, next_state) == (SHOW_READY, SHOW_NUMBERS):
             self.elapsed = 0
+            self.numbers_presented = []
             for i in range(self.number_count):
                 self.numbers_presented.append(random.randint(0, 9))
 
         if (self.state, next_state) == (SHOW_NUMBERS, ASK_FOR_NUMBERS):
+
+            self.button_list = []
 
             number_buttons = []
             for i in range(10):
@@ -89,6 +108,9 @@ class SimonNumbers(Game):
                 if self.numbers_presented[i] == self.numbers_entered[i]:
                     self.number_correct += 1
 
+            self.total_score = self.number_correct
+            self.current_level = self.number_count - 1
+
         self.state = next_state
 
     def game_draw(self):
@@ -99,7 +121,7 @@ class SimonNumbers(Game):
 
         if self.state == SHOW_NUMBERS:
 
-            total_time = 2 * self.number_count  # 2 seconds per number
+            total_time = self.seconds_per_number * self.number_count  # 2 seconds per number
 
             index = int(self.elapsed * self.number_count / total_time)
 
@@ -111,11 +133,29 @@ class SimonNumbers(Game):
                                           size=300)
 
         if self.state == SHOW_SCORE:
-            self.print_message_center("Score: " + str(self.number_correct) + " out of " + str(self.number_count),
+
+            self.print_message_center("Score: " + str(self.number_correct) + " out of " + str(self.number_count) + " | Total Score: " + str(self.total_score) + " Level: " + str(self.current_level),
                                       color.GREEN)
 
         if self.state == ASK_FOR_NUMBERS:
-            self.print_message_center("Which numbers appeared?", color=color.GREEN)
+            self.print_message_center("Which numbers appeared (in order)?", color=color.GREEN)
+
+            arcade.draw_text(
+                text=str(self.numbers_entered),
+                start_x=self.width / 2,
+                start_y=self.height / 2 - 90,
+                anchor_x="center",
+                anchor_y="center",
+                align="center",
+                width=200,
+                color=color.YELLOW,
+                font_size=13,
+                bold=True)
+
+            if len(self.numbers_entered) >= self.number_count:
+                if self.elapsed > 1:
+                    self.elapsed = 0
+                    self.transition(SHOW_SCORE)
 
     elapsed = 0
 
@@ -127,12 +167,22 @@ class SimonNumbers(Game):
             self.elapsed += delta_time
 
             # TODO: make configurable
-            if self.elapsed > 2 * self.number_count:
+            if self.elapsed > self.seconds_per_number * self.number_count:
+                self.elapsed = 0
                 self.transition(ASK_FOR_NUMBERS)
 
         if self.state == ASK_FOR_NUMBERS:
-            self.random_numbers = None
-            self.elapsed = 0
+            # self.random_numbers = None
+            self.elapsed += delta_time
+
+        if self.state == SHOW_SCORE:
+            self.elapsed += delta_time
+            if self.elapsed > 3:
+                self.elapsed = 0
+                self.numbers_presented = []
+                self.numbers_entered = []
+                self.button_list = []
+                self.transition(SHOW_NUMBERS)
 
         if self.state == EXIT:
             self.game_exit()

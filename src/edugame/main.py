@@ -51,7 +51,7 @@ class MainWindow(Game):
 
         self.game1_button = GameButton(center_x=self.width / 2,
                                        center_y=self.height / 2,
-                                       name="Simon Says",
+                                       name="Number Game",
                                        on_click=self.start_simon)
         self.cursor = None
         self.left_down = False

@@ -94,7 +94,7 @@ class GameButton(TextButton):
     def __init__(self, center_x, center_y, name, on_click):
         super().__init__(center_x=center_x,
                          center_y=center_y,
-                         width=10 + 12 * len(name),
+                         width=10 + 14 * len(name),
                          height=30,
                          text=name)
         self.on_click = on_click
