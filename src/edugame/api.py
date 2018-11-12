@@ -8,22 +8,8 @@ from arcade import Window
 
 import datetime
 
-from edugame.common import TextButton
-
-
-class ExitButton(TextButton):
-    def __init__(self, center_x, center_y, exit_handler):
-        super().__init__(center_x,
-                         center_y,
-                         width=50,
-                         height=30,
-                         text="Exit")
-        self.exit_handler = exit_handler
-
-    def on_release(self):
-        super().on_release()
-        self.exit_handler()
-
+from edugame import common
+from edugame.common import TextButton, GameButton
 
 
 # icenter_x=width - 25, center_y=height - 15, width=50, height=30, text="Exit", font_size=20)
@@ -56,7 +42,15 @@ def check_mouse_release_for_buttons(x, y, button_list):
         button.on_release()
 
 
+from enum import Enum
 
+
+class GameState(Enum):
+    READY = 'Ready'
+    EXITING = 'Exiting'
+    CLOSING = 'Closing'
+    STARTING = 'Starting'
+    STOPPED = 'Stopped'
 
 class Game(Window):
     """
@@ -65,17 +59,18 @@ class Game(Window):
     back to the main menu.  (not yet implemented)
     """
 
-    current_state = None # TODO: Implement state-based game play
+    current_state = None  # TODO: Implement state-based game play
 
     button_list = []
 
-    def __init__(self, width: float = 800, height: float = 600, title: str = 'Arcade Window', fullscreen: bool = True,
+    def __init__(self, width: float = 800, height: float = 600, title: str = 'Arcade Window', fullscreen: bool = False,
                  resizable: bool = False):
         super().__init__(width, height, title, fullscreen, resizable)
 
-        self.quit_button = ExitButton(width - 50, height - 30, self.game_exit)
+        self.quit_button = GameButton(self.width - 50, self.height - 30, "Exit", self.game_exit)
         self.button_list = []
-        self.button_list.append(self.quit_button)
+
+        self.state = GameState.READY
 
     def on_draw(self):
         super().on_draw()
@@ -87,6 +82,12 @@ class Game(Window):
 
         for button in self.button_list:
             button.draw()
+
+        self.quit_button.draw()
+
+    def game_play(self):
+        """"
+        Subclasses should implement this instead of overriding on_update() """
 
     def game_draw(self):
         """
@@ -115,6 +116,7 @@ class Game(Window):
         Show exit screen and return to the main menu
         :return:
         """
+        self.set_state(GameState.EXITING)
         self.game_stop()
         self.game_log_statistics()
 
@@ -122,11 +124,53 @@ class Game(Window):
         super().on_mouse_press(x, y, button, modifiers)
 
         check_mouse_press_for_buttons(x, y, self.button_list)
+        check_mouse_press_for_buttons(x, y, [self.quit_button])
 
     def on_mouse_release(self, x: float, y: float, button: int, modifiers: int):
         super().on_mouse_release(x, y, button, modifiers)
 
         check_mouse_release_for_buttons(x, y, self.button_list)
+        check_mouse_release_for_buttons(x, y, [self.quit_button])
+
+    def set_state(self, state):
+        self.state = state
+
+    def print_message(self, message, color):
+        """Prints a standard message on the center of the screen."""
+
+        xpos = 20
+        ypos = self.height
+
+        size = common.FONT_SIZE
+
+        arcade.draw_text(
+            text=message,
+            start_x=xpos,
+            start_y=ypos,
+            anchor_x="left",
+            anchor_y="top",
+            width=size*len(message),
+            color=color,
+            font_size=size,
+            bold=True)
+
+    def print_message_center(self, message, color, size = common.FONT_SIZE):
+        """Prints a standard message on the center of the screen."""
+
+        xpos = self.width / 2
+        ypos = self.height / 2
+
+        arcade.draw_text(
+            text=message,
+            start_x=xpos,
+            start_y=ypos,
+            anchor_x="center",
+            anchor_y="center",
+            align="center",
+            width=size*len(message),
+            color=color,
+            font_size=size,
+            bold=True)
 
     """
     Handle common key presses, like ESC(exit) and F1 (help) 
@@ -152,4 +196,3 @@ class GameSession:
         self.time = datetime.datetime.now()
         self.time_played = time_played
         self.score = score
-
