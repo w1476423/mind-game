@@ -1,76 +1,70 @@
 import datetime
 import sqlite3
-import time
-
 
 from edugame.api import GameSession
 
-#Create Connection
-def create_connection(database ="../statistics.db"):
-
-    try:
-        conn = sqlite3.connect("../statistics.db")
-        return conn
-    except Error as e:
-        print(e)
-
-    return None
-
-#Create Tables
-def create_table(conn,create_table_sql):
-
-    try:
-        c = conn.cursor()
-        c.execute(create_table_sql)
-    except Error as e:
-        print(e)
+"""
+Data access component for games
+"""
 
 
-def main():
-    database = "../statistics.db"
+class DataAccess:
 
-    #Create User Profile Table
-    user_profile_table = """CREATE TABLE IF NOT EXISTS User_Profile(
-                                                user_id INTEGER PRIMARY KEY,
-                                                name text NOT NULL,
-                                                age INTEGER,
-                                                creation_date text
-                                                );"""
-    #Create Game Session Table
-    game_session_table = """CREATE TABLE IF NOT EXISTS Game_Session(
-                                                user_id INTEGER PRIMARY KEY,
-                                                date_played text,
-                                                total_time_played INTEGER,
-                                                score INTEGER,
-                                                FOREIGN KEY (User_Profile_id) REFERENCES User_info (user_id)
-                                                );"""
+    CREATE_TABLE_STATEMENT = \
+        '''create table if not exists user_profile
+                                     (ID                INTEGER  PRIMARY KEY, 
+                                      USER_ID           INTEGER,   
+                                      DATE_PLAYED       DATE     NOT NULL, 
+                                      CREATION_DATE     DATE     NOT NULL)'''
 
-    #Create Game Levels
-    #game_levels_table = """CREATE TABLE IF NOT EXISTS Game_Levels(
-                                                #game_id INTEGER PRIMARY KEY,
-                                                #levels INTEGER,
-                                                #FOREIGN KEY (Game_Session_score) REFERENCES Game_Session (score)
-                                                #);"""
+    INSERT_STATEMENT = \
+        '''insert into user_profile (USER_ID, DATE_PLAYED, CREATION_DATE) values (?,?,?,?)'''
 
-  #Create Game Statistics
-  #game_statistics_table = """CREATE TABLE IF NOT EXISTS Game_Statistics(
-                                                #user_id INTEGER PRIMARY KEY,
-                                                #ranking INTEGER,
-                                                #FOREIGN KEY (Game_Session_score) REFERENCES Game_Session (score)
-                                                #);"""
-# create a database connection
-    conn = create_connection(database ="../statistics.db")
-    if conn is not None:
-        # create user_profile table
-        create_table(conn, user_profile_table)
-        # create user_profile table
-        create_table(conn, game_session_table)
-        # create game_levels table
-        #create_table(conn,game_levels_table)
-        # create game_statistics table
-        #create_table(conn,game_statistics_table)
-    else:
-        print("Error! cannot create the database connection.")
+    CREATE_TABLE_STATEMENT = \
+        '''create table if not exists game_session 
+                                     (ID                INTEGER  PRIMARY KEY, 
+                                      USER_ID           INTEGER,   
+                                      DATE_PLAYED       DATE     NOT NULL, 
+                                      TOTAL_TIME_PLAYED REAL     NOT NULL, 
+                                      SCORE             REAL     NOT NULL,
+                                      )'''
+
+    INSERT_STATEMENT = \
+        '''insert into game_history (USER_ID, DATE_PLAYED, TOTAL_TIME_PLAYED, SCORE) values (?,?,?,?)'''
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.connection = sqlite3.connect(database="M!ndGames.db")
+        self.setup()
+
+    def setup(self):
+        # create tables
+        c = self.connection.cursor()
+        c.execute(self.CREATE_TABLE_STATEMENT)
+
+        pass
+
+    def save_game_session(self, game_session:GameSession):
+        # TODO: validate
+        c = self.connection.cursor()
+
+        c.execute(self.INSERT_STATEMENT, (game_session.user_id,
+                                          datetime.date.today(),
+                                          game_session.time_played,
+                                          game_session.score))
+
+        self.connection.commit()
+
 
 if __name__ == '__main__':
-    main()
+    data_access = DataAccess()
+    print(data_access)
+
+
+    data_access.save_game_session(GameSession(1, 200, 20))
+
+    connection = sqlite3.connect(database="../M!ndGames.db")
+    c = connection.cursor()
+    c.execute('''SELECT score FROM game_history''')
+    row = c.fetchone()
+    print(row[0])
