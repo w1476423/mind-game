@@ -7,6 +7,12 @@ python -m arcade.examples.move_mouse
 """
 
 import arcade
+#equivalent of set PYTHONPATH=src
+import os, sys
+path=os.path.abspath(__file__)
+fd=os.path.dirname(path)
+directoryName=os.path.dirname(fd)
+sys.path.append(directoryName)
 
 # Set up the constants
 import edugame
