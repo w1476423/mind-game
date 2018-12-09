@@ -12,10 +12,9 @@ class DataAccess:
 
     CREATE_TABLE_STATEMENT = \
         '''create table if not exists user_profile
-                                     (ID                INTEGER  PRIMARY KEY, 
-                                      USER_ID           INTEGER,   
-                                      DATE_PLAYED       DATE     NOT NULL, 
-                                      CREATION_DATE     DATE     NOT NULL)'''
+                                     (USER_ID               INTEGER  PRIMARY KEY, 
+                                      CREATION_DATE         DATE     NOT NULL
+                                      DATE_PLAYED           DATE     NOT NULL, )'''
 
     INSERT_STATEMENT = \
         '''insert into user_profile (USER_ID, DATE_PLAYED, CREATION_DATE) values (?,?,?,?)'''
@@ -53,6 +52,13 @@ class DataAccess:
         c.execute(self.CREATE_TABLE_STATEMENT)
 
         pass
+    
+    def save_user_profile(self, user_profile:User_Profile):
+        c = self.connection.cursor()
+        c.execute(self, INSERT_STATEMENT, (user_profile.user_id,
+                                          user_profile.date.today(),
+                                          user_profile.date_played,
+                                          ))
 
     def save_game_session(self, game_session:GameSession):
         # TODO: validate
