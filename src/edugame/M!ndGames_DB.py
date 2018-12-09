@@ -75,6 +75,6 @@ if __name__ == '__main__':
 
     connection = sqlite3.connect(database="../M!ndGames.db")
     c = connection.cursor()
-    c.execute('''SELECT score FROM game_history''')
+    c.execute('''SELECT score FROM game_session''')
     row = c.fetchone()
     print(row[0])
