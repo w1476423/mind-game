@@ -31,16 +31,17 @@ class DataAccess:
                                       )'''
 
     INSERT_STATEMENT = \
-        '''insert into game_history (USER_ID, DATE_PLAYED, TOTAL_TIME_PLAYED, SCORE) values (?,?,?,?)'''
+        '''insert into game_session USER_ID, DATE_PLAYED, TOTAL_TIME_PLAYED, SCORE) values (?,?,?,?)'''
 
     CREATE_TABLE_STATEMENT = \
-        '''create table if not exists game_ 
+        '''create table if not exists game_type
                                      (Game_ID             INTEGER  PRIMARY KEY, 
                                       Game_Name           TEXT     NOT NULL,   
                                       )'''
 
     INSERT_STATEMENT = \
-        '''insert into game_history (USER_ID, DATE_PLAYED, TOTAL_TIME_PLAYED, SCORE) values (?,?,?,?)'''
+        '''insert into game_type (GAME_ID, GAME_NAME) values (?,?,?,?)'''
+    
     def __init__(self) -> None:
         super().__init__()
         self.connection = sqlite3.connect(database="M!ndGames.db")
