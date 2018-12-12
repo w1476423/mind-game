@@ -1,5 +1,7 @@
 # Team SWAG (Team3) Educational game project 
 
+[![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/ist303-team3-educational-game/Lobby)
+
 # The concept for our application
 
 The concept for our application is based on education. We are looking to build an application in the form of a game 

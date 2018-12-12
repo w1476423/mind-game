@@ -7,6 +7,7 @@ from arcade import color, Color
 
 from edugame.api import Game, GameState
 from edugame.common import *
+from edugame.db import *
 
 SHOW_READY = 'show_ready'
 GAME_STARTED = 'game_started'
@@ -110,7 +111,10 @@ class SimonNumbers(Game):
 
             self.total_score = self.number_correct
             self.current_level = self.number_count - 1
-
+            
+            # write total_score & current_level to db
+            write_to_db(self.total_score,self.current_level)
+            
         self.state = next_state
 
     def game_draw(self):
