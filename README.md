@@ -1,4 +1,4 @@
-# Team SWAG (Team3) Educational game project 
+# Team SWAG Educational game project 
 
 [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/ist303-team3-educational-game/Lobby)
 
@@ -6,8 +6,7 @@
 
 The concept for our application is based on education. We are looking to build an application in the form of a game 
 that can track data from gameplay to show the progress of any given user. Our target audience for this application is 
-currently for people with Autism/Alzheimers. We are seeking to develop an application that can improve a learning 
-disability of either of these groups of people. Collectively with the stakeholders who are; researchers, instructors, 
+currently for people who want to enhance memorization ability. We are seeking to develop an application that can potentially improve a learning disability. Collectively with the stakeholders who are; researchers, instructors, 
 developers (designers), users and parents, we believe that we can build something that is beneficial and impactful to 
 the audience we are seeking to reach out to. 
 
@@ -34,7 +33,7 @@ $ pip install -r requirements.txt
 
 # Running the game
 (venv)
-$ PYTHONPATH=src python src/edugame/main.py
+$ python src/edugame/main.py
 ```
 
 (Windows)
@@ -45,7 +44,6 @@ C:\project> venv\Scripts\activate.bat
 (venv) C:\project> pip install -r requirements.txt
 
 # Running the game
-(venv) C:\project> set PYTHONPATH=src
 (venv) C:\project> python src\edugame\main.py
 ```
 
