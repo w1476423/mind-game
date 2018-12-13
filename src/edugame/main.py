@@ -8,15 +8,24 @@ python -m arcade.examples.move_mouse
 
 import arcade
 
+#set PYTHONPATH=src
+import os, sys
+path=os.path.abspath(__file__)
+fd=os.path.dirname(path)
+directoryName=os.path.dirname(fd)
+sys.path.append(directoryName)
+
 # Set up the constants
 import edugame
 from edugame import common
 from edugame.common import GameButton
 from edugame.game1.game1 import SimonNumbers
+from edugame.game2.game2 import SimonSymbols
+from edugame.main_background import draw_snowflake
 
 
-RECT_WIDTH = 50
-RECT_HEIGHT = 50
+RECT_WIDTH = 500
+RECT_HEIGHT = 500
 
 
 class Cursor:
@@ -44,6 +53,9 @@ class Cursor:
 from edugame.api import Game, GameState
 
 class MainWindow(Game):
+
+    snowflake_positions = []
+
     """ Main application class. """
 
     def __init__(self, width = common.SCREEN_WIDTH, height = common.SCREEN_HEIGHT):
@@ -53,6 +65,12 @@ class MainWindow(Game):
                                        center_y=self.height / 2,
                                        name="Number Game",
                                        on_click=self.start_simon)
+
+        self.game2_button = GameButton(center_x=self.width / 2,
+                                       center_y=self.height / 2 - 100,
+                                       name="Symbol Game",
+                                       on_click=self.start_symbol)
+
         self.cursor = None
         self.left_down = False
         self.game = None
@@ -63,6 +81,10 @@ class MainWindow(Game):
         self.set_mouse_visible(False)
         arcade.set_background_color(arcade.color.BLUE_GRAY)
 
+        self.snowflake_positions.append({ "x" : 550.0, "y" : 330.0})
+        self.snowflake_positions.append({"x": 120.0, "y": 250.0})
+        self.snowflake_positions.append({"x": 270.0, "y": 370.0})
+        self.snowflake_positions.append({"x": 430.0, "y": 180.0})
         """ Set up the game and initialize the variables. """
         angle = 0
         color = arcade.color.WHITE
@@ -70,11 +92,18 @@ class MainWindow(Game):
         self.left_down = False
 
         self.button_list.append(self.game1_button)
+        self.button_list.append(self.game2_button)
 
     def update(self, dt):
         """ Move everything """
         if self.left_down:
             self.cursor.angle += 2
+
+        self.snowflake_positions[1]["y"]-=.06
+        self.snowflake_positions[0]["y"] -= .06
+        self.snowflake_positions[1]["x"] -= .01
+        self.snowflake_positions[2]["y"] -= .04
+        self.snowflake_positions[3]["y"] -= .02
 
     def handle_exit(self):
         if self.game:
@@ -91,6 +120,13 @@ class MainWindow(Game):
             self.game.game_start()
             self.set_visible(False)
 
+    def start_symbol(self):
+        if not self.game:
+            self.game = SimonSymbols()
+            self.game.quit_button.on_click = self.handle_exit
+            arcade.set_window(self.game)
+            self.game.game_start()
+            self.set_visible(False)
 
     def on_draw(self):
         super().on_draw()
@@ -137,12 +173,16 @@ class MainWindow(Game):
     def game_draw(self):
         super().game_draw()
 
+        for pos in self.snowflake_positions:
+            draw_snowflake(pos["x"], pos["y"])
+
     def on_mouse_motion(self, x, y, dx, dy):
         """
         Called whenever the mouse moves.
         """
         self.cursor.x = x
         self.cursor.y = y
+
 
 
 def main():
