@@ -9,6 +9,13 @@ python -m arcade.examples.move_mouse
 import arcade
 #set PYTHONPATH=src
 import os, sys
+
+from edugame.game2.game2 import MementoSymbols
+import edugame
+from edugame import common
+from edugame.common import GameButton
+from edugame.main_background import draw_snowflake
+
 path=os.path.abspath(__file__)
 fd=os.path.dirname(path)
 directoryName=os.path.dirname(fd)
@@ -18,10 +25,7 @@ sys.path.append(directoryName)
 import edugame
 from edugame import common
 from edugame.common import GameButton
-from edugame.game1.game1 import SimonNumbers
-from edugame.game2.game2 import SimonSymbols
-from edugame.main_background import draw_snowflake
-
+from edugame.game1.game1 import Memento
 
 RECT_WIDTH = 500
 RECT_HEIGHT = 500
@@ -65,17 +69,12 @@ class MainWindow(Game):
         self.game1_button = GameButton(center_x=self.width / 3,
                                        center_y=self.height * 1 / 2,
                                        name="Numbers",
-                                       on_click=self.start_simon)
+                                       on_click=self.start_memento)
 
         self.game2_button = GameButton(center_x=self.width * 2/3,
                                        center_y=self.height * 1 / 2,
                                        name="Symbols",
-                                       on_click=self.start_simon)
-
-        self.stats_button = GameButton(center_x=self.width / 2,
-                                       center_y=self.height * 1/3,
-                                       name="Statistics",
-                                       on_click=self.start_simon)
+                                       on_click=self.start_memento_symbols)
 
         self.cursor = None
         self.left_down = False
@@ -113,19 +112,26 @@ class MainWindow(Game):
 
     def handle_exit(self):
         if self.game:
-            self.game.close()
+            self.game.game_exit()
             self.game = None
             self.set_visible(True)
             self.set_state(GameState.READY)
 
-    def start_simon(self):
+    def start_memento(self):
         if not self.game:
-            self.game = SimonNumbers()
+            self.game = Memento()
             self.game.quit_button.on_click = self.handle_exit
             arcade.set_window(self.game)
             self.game.game_start()
             self.set_visible(False)
 
+    def start_memento_symbols(self):
+        if not self.game:
+            self.game = MementoSymbols()
+            self.game.quit_button.on_click = self.handle_exit
+            arcade.set_window(self.game)
+            self.game.game_start()
+            self.set_visible(False)
 
     def on_draw(self):
         super().on_draw()

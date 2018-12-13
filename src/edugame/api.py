@@ -66,7 +66,7 @@ class Game(Window):
     label_list = []
 
     def __init__(self, width: float = 800, height: float = 600, title: str = 'Arcade Window', fullscreen: bool = False,
-                 resizable: bool = False):
+                 resizable: bool = False, game_exit = None):
         super().__init__(width, height, title, fullscreen, resizable)
 
         self.quit_button = GameButton(self.width - 50, self.height - 30, "Exit", self.game_exit)
@@ -110,6 +110,7 @@ class Game(Window):
 
 
     def game_stop(self):
+        print('game_stop')
         pass
 
     def game_start(self):
@@ -128,6 +129,7 @@ class Game(Window):
         Show exit screen and return to the main menu
         :return:
         """
+        print('Exiting')
         self.set_state(GameState.EXITING)
         self.game_stop()
         self.game_log_statistics()

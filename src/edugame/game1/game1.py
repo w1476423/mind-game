@@ -17,23 +17,29 @@ SHOW_SCORE = 'show_score'
 EXIT = 'exit'
 
 
-class SimonNumbers(Game):
+class Memento(Game):
     """
     Card-based memory game
     """
-
+    game_id = '1'
     total_score = 0
     elapsed = 0
-
+    glyphs = []
+    # glyphs = [ 'A', 'B', 'C', 'D', 'E', 'F', 'G' ]
     numbers = []
+    game_over = False
+    current_level = -1
 
     def __init__(self, width: float = 640, height: float = 480, title: str = 'Arcade Window',
-                 resizable: bool = False):
+                 resizable: bool = False, glyphs=None):
         super().__init__(width, height, title, resizable)
 
-        self.number_count = 2  # TODO: populate this from a game level property
-
         self.number_colors = [color.GREEN, color.YELLOW, color.BLUE, color.WHITE, color.RED, color.ORANGE]
+
+        if not glyphs:
+            self.glyphs = [x for x in range(0, 10)]
+        else:
+            self.glyphs = random.sample(glyphs, 10)
 
         self.numbers_presented = []
         self.numbers_entered = []
@@ -50,20 +56,20 @@ class SimonNumbers(Game):
 
         arcade.set_background_color(color.COOL_GREY)
 
-    def selected_number(self, i):
+    def selected_number(self, n):
 
         current_digit = len(self.numbers_entered)
 
         if current_digit >= len(self.numbers):
             return
 
-        self.numbers_entered.append(i)
+        self.numbers_entered.append(n)
 
-        color = arcade.color.YELLOW if i == self.numbers[current_digit] else arcade.color.RED
+        color = arcade.color.GREEN if n == self.numbers[current_digit] else arcade.color.RED
 
         label = Label(x = self.width/2 - self.number_count*5 + len(self.label_list)*14,
                                      y = self.height * 1/3,
-                                     message=str(i),
+                                     message=n,
                                      color=color)
 
         self.label_list.append(label)
@@ -75,7 +81,7 @@ class SimonNumbers(Game):
 
     def selected_level(self, i):
         self.current_level = i
-        self.number_count = self.current_level + 1
+        self.number_count = self.current_level*2
         self.transition(SHOW_NUMBERS)
 
     def get_color(self, i):
@@ -96,7 +102,7 @@ class SimonNumbers(Game):
             #                          on_click=lambda: self.transition(SHOW_NUMBERS))
 
             number_buttons = []
-            for i in range(1, 9):
+            for i in range(1, 8):
                 number_buttons.append(
                     GameButton(
                         name=str(i),
@@ -117,36 +123,41 @@ class SimonNumbers(Game):
             # else:
             #     self.number_count = max(2, self.number_count - 1)
 
-            self.number_count = self.current_level  # TODO: populate this from a game level property
+            # self.number_count = self.current_level  # TODO: populate this from a game level property
             self.number_correct = 0
 
         if (self.state, next_state) == (SHOW_SCORE, SHOW_NUMBERS) or \
                 (self.state, next_state) == (SHOW_READY, SHOW_NUMBERS):
             self.elapsed = 0
-            self.numbers = [random.randint(0, 9) for _ in range(self.number_count)]
+            # self.numbers = [ self.glyphs[random.randint(0, 9)] for _ in range(self.number_count)]
+
+            self.numbers = [ random.choice(self.glyphs) for _ in range(self.number_count) ]
+
             for number in self.numbers:
                 label = Label(x=self.width / 2 - self.number_count * 20 + len(self.label_list) * 40,
                               y=self.height * 1 / 2,
                               message=str(number),
                               size=40,
                               color=arcade.color.GREEN)
+
+                label.seed = random.random()
                 self.label_list.append(label)
 
         if (self.state, next_state) == (SHOW_NUMBERS, ASK_FOR_NUMBERS):
 
             self.button_list = []
 
-            number_buttons = []
-            for i in range(10):
-                number_buttons.append(
+            glyph_buttons = []
+            for i in range(len(self.glyphs)):
+                glyph_buttons.append(
                     GameButton(
-                        name=str(i),
+                        name=str(self.glyphs[i]),
                         center_x=self.width / 2 - 140 + 30 * i,
                         center_y=self.height / 2 - 40,
-                        on_click=lambda idx=i: self.selected_number(idx))
+                        on_click=lambda idx=self.glyphs[i]: self.selected_number(idx))
                 )
 
-            self.button_list += number_buttons
+            self.button_list += glyph_buttons
 
         if (self.state, next_state) == (ASK_FOR_NUMBERS, SHOW_SCORE):
 
@@ -157,14 +168,16 @@ class SimonNumbers(Game):
                 if self.numbers[i] == self.numbers_entered[i]:
                     self.number_correct += 1
 
-            self.total_score = self.number_correct
+            if self.number_correct != len(self.numbers):
+                # missed one
+                self.game_over = True
+
+            self.total_score += self.number_correct
 
             # self.current_level = self.number_count - 1
 
             # write total_score & current_level to db
             # write_to_db(self.total_score,self.current_level)
-
-            write_to_db('1',self.total_score,self.current_level)
 
         self.state = next_state
 
@@ -175,27 +188,12 @@ class SimonNumbers(Game):
         #     self.print_message_center("Press Start When Ready!", color=color.GREEN)
 
         if self.state == SHOW_NUMBERS:
-            total_time = self.seconds_per_number * self.number_count  # 2 seconds per number
-            # index = int(self.elapsed * self.number_count / total_time)
-            # time = round(total_time - self.elapsed, 2)
+            # total_time = self.seconds_per_number * self.number_count  # 2 seconds per number
 
-            import math
             for label in self.label_list:
-                label.x +=  random.randint(-1,1) + 0.5*random.randint(-2,2)*math.cos(self.elapsed) + 0.5*random.randint(-2,2)*math.cos(-self.elapsed)
-                label.y += random.randint(-1,1) + 0.5*random.randint(-2,2)*math.sin(self.elapsed) + 0.5*random.randint(-2,2)*math.sin(-self.elapsed)
+                label.x += 0.5*random.randint(-1,1)
+                label.y += 0.5*random.randint(-1,1)
                 label.draw()
-
-            # numStr = ''.join(str(x) for x in self.numbers)
-            #
-            # self.print_message_center(numStr, arcade.color.WHITE, 40)
-            # index = int(self.elapsed * self.number_count / total_time)
-
-            # print("elapsed: " + str(self.elapsed) + ' pct: ' + str(self.elapsed / total_time) + ' index: ' + str(index))
-
-            # if index < self.number_count:
-            #     self.print_message_center(message=str(self.numbers_presented[index]),
-            #                               color=self.get_color(index),
-            #                               size=300)
 
         if self.state == SHOW_SCORE:
             self.print_message_center(
@@ -204,7 +202,7 @@ class SimonNumbers(Game):
                 color.GREEN)
 
         if self.state == ASK_FOR_NUMBERS:
-            self.print_message_center("Which numbers appeared (in order)?", color=color.GREEN)
+            self.print_message_center("Which symbols appeared (in order)?", color=color.GREEN)
 
             for label in self.label_list:
                 label.draw()
@@ -239,13 +237,30 @@ class SimonNumbers(Game):
                 self.numbers_entered.clear()
                 self.button_list.clear()
 
-                self.transition(SHOW_NUMBERS)
+                if self.game_over:
+                    self.transition(EXIT)
+                else:
+                    self.transition(SHOW_NUMBERS)
 
         if self.state == EXIT:
-            self.game_exit()
+            self.quit_button.on_click()
+            self.close()
+
+    def game_exit(self):
+        super().game_exit()
+
+    def game_stop(self):
+        super().game_stop()
+        self.close()
+
+
+    def game_log_statistics(self):
+
+        if self.current_level != -1:
+            write_to_db(self.game_id, self.total_score, self.current_level)
 
 
 if __name__ == '__main__':
-    x = SimonNumbers()
+    x = Memento()
     x.state = SHOW_READY
     x.on_update(1)

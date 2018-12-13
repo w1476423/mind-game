@@ -26,7 +26,7 @@ class TextButton:
         self.center_y = center_y
         self.width = width
         self.height = height
-        self.text = text
+        self.text = str(text)
         self.font_size = font_size
         self.font_face = font_face
         self.pressed = False
@@ -94,9 +94,9 @@ class GameButton(TextButton):
     def __init__(self, center_x, center_y, name, on_click):
         super().__init__(center_x=center_x,
                          center_y=center_y,
-                         width=10 + 14 * len(name),
+                         width=10 + 14 * len(str(name)),
                          height=30,
-                         text=name)
+                         text=str(name))
         self.on_click = on_click
 
     def on_release(self):
@@ -108,7 +108,7 @@ class Label:
     def __init__(self, x, y, message, color=arcade.color.WHITE, size = 20, rotation = 0):
         self.x = x
         self.y = y
-        self.message = message
+        self.message = str(message)
         self.color = color
         self.size = size
         self.rotation = rotation
