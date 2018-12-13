@@ -62,13 +62,16 @@ class Game(Window):
     current_state = None  # TODO: Implement state-based game play
 
     button_list = []
+    label_list = []
 
     def __init__(self, width: float = 800, height: float = 600, title: str = 'Arcade Window', fullscreen: bool = False,
                  resizable: bool = False):
         super().__init__(width, height, title, fullscreen, resizable)
 
         self.quit_button = GameButton(self.width - 50, self.height - 30, "Exit", self.game_exit)
+
         self.button_list = []
+        self.label_list = []
 
         self.state = GameState.READY
 
@@ -79,6 +82,9 @@ class Game(Window):
 
         # Call implementation of draw. This ensures buttons render on top
         self.game_draw()
+
+        for label in self.label_list:
+            label.draw()
 
         for button in self.button_list:
             button.draw()

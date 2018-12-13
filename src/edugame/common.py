@@ -4,10 +4,10 @@ import arcade
 Includes common components (buttons, etc) for a uniform look.
 """
 
-
 SCREEN_WIDTH = 640
 SCREEN_HEIGHT = 480
 FONT_SIZE = 20
+
 
 class TextButton:
     """ Text-based button """
@@ -102,3 +102,16 @@ class GameButton(TextButton):
     def on_release(self):
         super().on_release()
         self.on_click()
+
+
+class Label:
+    def __init__(self, x, y, message, color=arcade.color.WHITE, size = 20, rotation = 0):
+        self.x = x
+        self.y = y
+        self.message = message
+        self.color = color
+        self.size = size
+        self.rotation = rotation
+
+    def draw(self):
+        arcade.draw_text(self.message, self.x, self.y, self.color, self.size, bold=True, rotation=self.rotation)

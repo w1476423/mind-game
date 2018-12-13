@@ -49,15 +49,29 @@ class Cursor:
 
 from edugame.api import Game, GameState
 
+NUMBER_OF_GAMES = 2
+
 class MainWindow(Game):
     """ Main application class. """
-    snowflake_positions=[]
+
     def __init__(self, width = common.SCREEN_WIDTH, height = common.SCREEN_HEIGHT):
         super().__init__(width, height, title="Main Window", fullscreen=False, resizable=False)
 
-        self.game1_button = GameButton(center_x=self.width / 2,
-                                       center_y=self.height / 2,
-                                       name="Number Game",
+        self.game1_button = GameButton(center_x=self.width / 3,
+                                       center_y=self.height * 1 / 2,
+                                       name="Numbers",
+                                       on_click=self.start_simon)
+
+        self.game2_button = GameButton(center_x=self.width * 2/3,
+                                       center_y=self.height * 1 / 2,
+                                       name="Symbols",
+                                       on_click=self.start_simon)
+
+
+
+        self.stats_button = GameButton(center_x=self.width / 2,
+                                       center_y=self.height * 1/3,
+                                       name="Statistics",
                                        on_click=self.start_simon)
         self.cursor = None
         self.left_down = False
@@ -68,12 +82,7 @@ class MainWindow(Game):
         self.set_viewport(0, width, 0, height)
         self.set_mouse_visible(False)
         arcade.set_background_color(arcade.color.BLUE_GRAY)
-        
-        self.snowflake_positions.append({ "x" : 550.0, "y" : 330.0})
-        self.snowflake_positions.append({"x": 120.0, "y": 250.0})
-        self.snowflake_positions.append({"x": 270.0, "y": 370.0})
-        self.snowflake_positions.append({"x": 430.0, "y": 180.0})
-        
+
         """ Set up the game and initialize the variables. """
         angle = 0
         color = arcade.color.WHITE
@@ -81,18 +90,13 @@ class MainWindow(Game):
         self.left_down = False
 
         self.button_list.append(self.game1_button)
+        self.button_list.append(self.game2_button)
+        self.button_list.append(self.stats_button)
 
     def update(self, dt):
         """ Move everything """
         if self.left_down:
             self.cursor.angle += 2
-        
-        #moves the snowflakes
-        self.snowflake_positions[1]["y"]-=.06
-        self.snowflake_positions[0]["y"] -= .06
-        self.snowflake_positions[1]["x"] -= .01
-        self.snowflake_positions[2]["y"] -= .04
-        self.snowflake_positions[3]["y"] -= .02
 
     def handle_exit(self):
         if self.game:
@@ -155,8 +159,8 @@ class MainWindow(Game):
     def game_draw(self):
         super().game_draw()
         
-        for pos in self.snowflake_positions:
-            draw_snowflake(pos["x"], pos["y"])
+        # for pos in self.snowflake_positions:
+        #     draw_snowflake(pos["x"], pos["y"])
 
     def on_mouse_motion(self, x, y, dx, dy):
         """
