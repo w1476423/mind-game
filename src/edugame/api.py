@@ -10,6 +10,7 @@ import datetime
 
 from edugame import common
 from edugame.common import TextButton, GameButton
+from main_background import draw_snowflake
 
 
 # icenter_x=width - 25, center_y=height - 15, width=50, height=30, text="Exit", font_size=20)
@@ -99,9 +100,14 @@ class Game(Window):
         """
         Subclasses should implement this instead of overriding on_draw() to ensure that main window components
         are displayed on top.
+
+        call your drawing functions here
         :return:
         """
-        pass
+
+        # draw_snowflake(200,300)
+
+
 
     def game_stop(self):
         pass
@@ -179,7 +185,7 @@ class Game(Window):
             bold=True)
 
     """
-    Handle common key presses, like ESC(exit) and F1 (help) 
+    Handle common key presses, like ESC(exit) and F1 (help)
     """
 
     def on_key_press(self, symbol: int, modifiers: int):
