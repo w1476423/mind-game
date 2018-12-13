@@ -1,5 +1,4 @@
 import datetime
-import sqlite3
 import mysql.connector as mysql
 from mysql.connector import errorcode
 
