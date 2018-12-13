@@ -19,6 +19,7 @@ import edugame
 from edugame import common
 from edugame.common import GameButton
 from edugame.game1.game1 import SimonNumbers
+from main_background import draw_snowflake
 
 
 RECT_WIDTH = 50
