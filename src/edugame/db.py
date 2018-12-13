@@ -77,3 +77,15 @@ def write_to_db(item1,item2,item3):
     except Exception as err:
         print("Failed inserting record:{}".format(err))
     CloseDB()
+
+# write_to_db()
+# Get games_idgames
+#
+# cnx = OpenDB()
+# csr = cnx.cursor()
+# sql = "SELECT * FROM `mindgame_db `.`comprehensive` WHERE (`game_name`) = '" + game_name + "'"
+# csr.execute(sql)
+# for (game_name) in csr:
+# games_idgames = game_name[0]
+# print (games_idgames)
+# upts_db.CloseDB(cnx)
