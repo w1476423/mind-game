@@ -10,16 +10,16 @@ import arcade
 #set PYTHONPATH=src
 import os, sys
 
+path=os.path.abspath(__file__)
+fd=os.path.dirname(path)
+directoryName=os.path.dirname(fd)
+sys.path.append(directoryName)
+
 from edugame.game2.game2 import MementoSymbols
 import edugame
 from edugame import common
 from edugame.common import GameButton
 from edugame.main_background import draw_snowflake
-
-path=os.path.abspath(__file__)
-fd=os.path.dirname(path)
-directoryName=os.path.dirname(fd)
-sys.path.append(directoryName)
 
 # Set up the constants
 import edugame
