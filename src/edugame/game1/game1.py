@@ -203,7 +203,7 @@ class Memento(Game):
                 color.GREEN)
 
             if self.max_score is not None:
-                score = "High Score: " + str(self.total_score if self.total_score > self.max_score else self.max_score)
+                score = "Highest Score: " + str(self.total_score if self.total_score > self.max_score else self.max_score)
 
                 arcade.draw_text(
                     text=score,
