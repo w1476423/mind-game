@@ -28,6 +28,7 @@ class Memento(Game):
     # glyphs = [ 'A', 'B', 'C', 'D', 'E', 'F', 'G' ]
     numbers = []
     game_over = False
+    missed_numbers = 0
     current_level = -1
 
     def __init__(self, width: float = 640, height: float = 480, title: str = 'Arcade Window',
@@ -67,7 +68,7 @@ class Memento(Game):
 
         color = arcade.color.GREEN if n == self.numbers[current_digit] else arcade.color.RED
 
-        label = Label(x = self.width/2 - self.number_count*5 + len(self.label_list)*14,
+        label = Label(x = self.width/2 - self.number_count*5 + len(self.label_list)*18,
                                      y = self.height * 1/3,
                                      message=n,
                                      color=color)
@@ -168,16 +169,16 @@ class Memento(Game):
                 if self.numbers[i] == self.numbers_entered[i]:
                     self.number_correct += 1
 
-            if self.number_correct != len(self.numbers):
+            self.missed_numbers += len(self.numbers) - self.number_correct
+
+            if self.missed_numbers >= 3:
                 # missed one
                 self.game_over = True
 
             self.total_score += self.number_correct
 
-            # self.current_level = self.number_count - 1
-
-            # write total_score & current_level to db
-            # write_to_db(self.total_score,self.current_level)
+            self.max_score = max_score_for_level(self.game_id, self.current_level)
+            print("Max score for level: " + str(self.max_score))
 
         self.state = next_state
 
@@ -197,9 +198,36 @@ class Memento(Game):
 
         if self.state == SHOW_SCORE:
             self.print_message_center(
-                "Score: " + str(self.number_correct) + " out of " + str(self.number_count) + " | Total Score: " + str(
+                "Score: " + str(self.number_correct) + " out of " + str(self.number_count) + " | Total: " + str(
                     self.total_score) + " Level: " + str(self.current_level),
                 color.GREEN)
+
+            score = "High Score: " + str(self.total_score if self.total_score > self.max_score else self.max_score)
+
+            arcade.draw_text(
+                text=score,
+                start_x=80,
+                start_y=20,
+                anchor_x="center",
+                anchor_y="center",
+                align="center",
+                width=160,
+                color=color.YELLOW if self.total_score > self.max_score else color.BLUE,
+                font_size=14,
+                bold=True)
+
+
+            arcade.draw_text(
+                text="Missed : " + str(self.missed_numbers),
+                start_x=240,
+                start_y=20,
+                anchor_x="center",
+                anchor_y="center",
+                align="center",
+                width=160,
+                color=color.RED,
+                font_size=14,
+                bold=True)
 
         if self.state == ASK_FOR_NUMBERS:
             self.print_message_center("Which symbols appeared (in order)?", color=color.GREEN)
@@ -251,13 +279,17 @@ class Memento(Game):
 
     def game_stop(self):
         super().game_stop()
+        self.stop_time = datetime.datetime.now()
         self.close()
+
+    def game_start(self):
+        self.start_time = datetime.datetime.now()
 
 
     def game_log_statistics(self):
 
         if self.current_level != -1:
-            write_to_db(self.game_id, self.total_score, self.current_level)
+            write_to_db(self.game_id, self.total_score, self.current_level, self.start_time, self.stop_time)
 
 
 if __name__ == '__main__':

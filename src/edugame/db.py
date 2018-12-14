@@ -60,7 +60,7 @@ def CloseDB():
 # print('Connection Closed')
 # return cnx
 
-def write_to_db(item1,item2,item3):
+def write_to_db(item1,item2,item3, start_time, stop_time):
     connection = openDB()
     csr = connection.cursor()
     try:
@@ -68,9 +68,9 @@ def write_to_db(item1,item2,item3):
 # self.sql = "INSERT INTO games_has_users (users_idusers,games_idgames) VALUES (%s ,%s)"
 # self.val = (session_userid ,self.games_idgames)
 
-        print(item1,item2,item3)
-        sql = "INSERT INTO comprehensive (game_id, score, level_name) VALUES (%s, %s, %s)"
-        val=(item1,item2,item3)
+        print(item1,item2,item3, start_time, stop_time)
+        sql = "INSERT INTO comprehensive (game_id, score, level_name, start_time, end_time) VALUES (%s, %s, %s, %s, %s)"
+        val=(item1,item2,item3, start_time, stop_time)
         print("sql = " + str(sql))
         csr.execute(sql,val)
         connection.commit()
@@ -78,6 +78,25 @@ def write_to_db(item1,item2,item3):
     except Exception as err:
         print("Failed inserting record:{}".format(err))
     CloseDB()
+
+def max_score_for_level(game_id, level):
+    # prepare a cursor object using cursor() method
+    connection = openDB()
+    cursor = connection.cursor()
+
+    sql = "SELECT MAX(score) FROM comprehensive \
+           WHERE game_id = '%s' AND level_name = '%s'" % (game_id, level)
+    try:
+        # Execute the SQL command
+        cursor.execute(sql)
+        # Fetch all the rows in a list of lists.
+        results = cursor.fetchall()
+        for row in results:
+            max_score = row[0]
+            return max_score
+    except:
+        pass
+
 
 # write_to_db()
 # Get games_idgames
