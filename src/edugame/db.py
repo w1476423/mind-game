@@ -94,8 +94,10 @@ def max_score_for_level(game_id, level):
         for row in results:
             max_score = row[0]
             return max_score
-    except:
-        pass
+    except :
+        return 0
+
+    return 0
 
 
 # write_to_db()

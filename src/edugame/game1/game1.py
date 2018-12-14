@@ -23,6 +23,7 @@ class Memento(Game):
     """
     game_id = '1'
     total_score = 0
+
     elapsed = 0
     glyphs = []
     # glyphs = [ 'A', 'B', 'C', 'D', 'E', 'F', 'G' ]
@@ -68,7 +69,7 @@ class Memento(Game):
 
         color = arcade.color.GREEN if n == self.numbers[current_digit] else arcade.color.RED
 
-        label = Label(x = self.width/2 - self.number_count*5 + len(self.label_list)*18,
+        label = Label(x = self.width/2 - self.number_count*6 + len(self.label_list)*22,
                                      y = self.height * 1/3,
                                      message=n,
                                      color=color)
@@ -178,7 +179,6 @@ class Memento(Game):
             self.total_score += self.number_correct
 
             self.max_score = max_score_for_level(self.game_id, self.current_level)
-            print("Max score for level: " + str(self.max_score))
 
         self.state = next_state
 
@@ -192,8 +192,8 @@ class Memento(Game):
             # total_time = self.seconds_per_number * self.number_count  # 2 seconds per number
 
             for label in self.label_list:
-                label.x += 0.5*random.randint(-1,1)
-                label.y += 0.5*random.randint(-1,1)
+                label.x += 0.25*random.randint(-1,1)
+                label.y += 0.25*random.randint(-1,1)
                 label.draw()
 
         if self.state == SHOW_SCORE:
@@ -202,19 +202,20 @@ class Memento(Game):
                     self.total_score) + " Level: " + str(self.current_level),
                 color.GREEN)
 
-            score = "High Score: " + str(self.total_score if self.total_score > self.max_score else self.max_score)
+            if self.max_score is not None:
+                score = "High Score: " + str(self.total_score if self.total_score > self.max_score else self.max_score)
 
-            arcade.draw_text(
-                text=score,
-                start_x=80,
-                start_y=20,
-                anchor_x="center",
-                anchor_y="center",
-                align="center",
-                width=160,
-                color=color.YELLOW if self.total_score > self.max_score else color.BLUE,
-                font_size=14,
-                bold=True)
+                arcade.draw_text(
+                    text=score,
+                    start_x=80,
+                    start_y=20,
+                    anchor_x="center",
+                    anchor_y="center",
+                    align="center",
+                    width=160,
+                    color=color.YELLOW if self.total_score > self.max_score else color.BLUE,
+                    font_size=14,
+                    bold=True)
 
 
             arcade.draw_text(
